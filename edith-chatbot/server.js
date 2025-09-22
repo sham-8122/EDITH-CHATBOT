@@ -60,4 +60,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`)
 );
-change this code into without integrating the api instead of that normal communication

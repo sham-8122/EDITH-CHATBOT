@@ -2,34 +2,27 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
-const db = require("./db"); // your database setup
+const db = require("./db");
 require("dotenv").config();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public"))); // serve frontend
 
-// --- Simple chatbot logic ---
-function getBotReply(userMessage) {
-  const msg = userMessage.toLowerCase();
+// --- Google Gemini setup ---
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  if (msg.includes("hello") || msg.includes("hi")) {
-    return "Hello! How can I help you today?";
-  } else if (msg.includes("how are you")) {
-    return "I'm good, thank you! How about you?";
-  } else if (msg.includes("bye")) {
-    return "Goodbye! Have a nice day!";
-  } else {
-    return "Sorry, I didn't understand that. Can you rephrase?";
-  }
-}
-
-// Save a chat message and reply
+// Save a chat message and reply (using Gemini)
 app.post("/chat", async (req, res) => {
   try {
     const userMessage = (req.body && req.body.message) || "";
-    const botReply = getBotReply(userMessage);
+
+    // Call Gemini API
+    const result = await model.generateContent(userMessage);
+    const botReply = result.response.text();
 
     // Save to DB
     db.query(
@@ -44,12 +37,12 @@ app.post("/chat", async (req, res) => {
       }
     );
   } catch (err) {
-    console.error("Chat error:", err);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("Gemini API error:", err);
+    res.status(500).json({ error: "AI response failed" });
   }
 });
 
-// Get recent messages (chat history)
+// Get recent messages (for loading chat history)
 app.get("/history", (req, res) => {
   db.query(
     "SELECT id, user_message, bot_reply, created_at FROM messages ORDER BY id DESC LIMIT 50",
@@ -67,3 +60,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`)
 );
+change this code into without integrating the api instead of that normal communication

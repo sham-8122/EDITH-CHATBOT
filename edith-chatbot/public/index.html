@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edith - AI Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <header>
+      <div class="avatar">E</div>
+      <h1>Edith <span></span></h1>
+    </header>
+
+    <main id="chat-box" aria-live="polite"></main>
+
+    <form class="input-area" id="chat-form">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Ask anything...."
+        autocomplete="off"
+        aria-label="Your message"
+        required
+      />
+      <button type="submit" id="send-btn">Ask</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

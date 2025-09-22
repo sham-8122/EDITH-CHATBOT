@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS edith_chatbot;
+USE edith_chatbot;
+
+CREATE TABLE IF NOT EXISTS messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_message TEXT,
+  bot_reply TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
